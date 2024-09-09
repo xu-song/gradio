@@ -232,6 +232,7 @@ class Queue:
                 "Event not found in queue. If you are deploying this Gradio app with multiple replicas, please enable stickiness to ensure that all requests from the same user are routed to the same instance."
             ) from e
         event_queue.queue.append(event)
+        print(f"in_queue: {body.data} event_queue_size: {len(event_queue.queue)}")
         self.event_analytics[event._id] = {
             "time": time.time(),
             "status": "queued",
@@ -280,6 +281,7 @@ class Queue:
                     ][: block_fn.max_batch_size - 1]
 
                 for event in events:
+                    print(f"out_queue: {event.fn.name}{event.data.data} event_queue_size: {len(event_queue.queue)}")
                     event_queue.queue.remove(event)
 
                 return events, batch, concurrency_id
